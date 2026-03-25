@@ -67,3 +67,15 @@ useHead({
     </p>
   </div>
 </template>
+
+<style scoped>
+a {
+  color: #1ea54c;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover {
+  color: #25c45c;
+  text-decoration: underline;
+}
+</style>

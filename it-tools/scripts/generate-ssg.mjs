@@ -138,6 +138,16 @@ writeIndexHtml(
 );
 generatedRoutes.push(`${BASE_URL}/privacy/`);
 
+writeIndexHtml(
+  'terms',
+  injectMeta(shellHtml, {
+    title: 'Terms and Conditions | Xaygo',
+    description: 'Terms and Conditions for using Xaygo — free online developer tools provided as-is with no warranty.',
+    canonical: `${BASE_URL}/terms/`,
+  }),
+);
+generatedRoutes.push(`${BASE_URL}/terms/`);
+
 // ---------------------------------------------------------------------------
 // 7. Generate sitemap.xml
 // ---------------------------------------------------------------------------
@@ -154,5 +164,5 @@ ${generatedRoutes
 
 writeFileSync(join(DIST, 'sitemap.xml'), sitemap, 'utf-8');
 
-console.log(`[ssg] Generated ${toolSlugs.length} tool pages + /about + /privacy`);
+console.log(`[ssg] Generated ${toolSlugs.length} tool pages + /about + /privacy + /terms`);
 console.log(`[ssg] Sitemap written with ${generatedRoutes.length} URLs → dist/sitemap.xml`);

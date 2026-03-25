@@ -35,6 +35,11 @@ export const routes = [
     name: 'privacy',
     component: () => import('./pages/Privacy.vue'),
   },
+  {
+    path: '/terms',
+    name: 'terms',
+    component: () => import('./pages/Terms.vue'),
+  },
   ...toolsRoutes,
   ...toolsRedirectRoutes,
   ...(config.app.env === 'development' ? demoRoutes : []),

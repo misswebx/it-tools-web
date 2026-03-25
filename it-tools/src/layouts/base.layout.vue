@@ -2,7 +2,7 @@
 import { NIcon } from 'naive-ui';
 
 import { RouterLink } from 'vue-router';
-import { Home2, Menu2 } from '@vicons/tabler';
+import { BrandGithub, Home2, Menu2 } from '@vicons/tabler';
 
 import { storeToRefs } from 'pinia';
 import XaygoLogo from '../assets/xaygo-logo.png';
@@ -10,7 +10,6 @@ import XaygoIcon from '../assets/xaygo-icon.png';
 import MenuLayout from '../components/MenuLayout.vue';
 import NavbarButtons from '../components/NavbarButtons.vue';
 import { useStyleStore } from '@/stores/style.store';
-import { config } from '@/config';
 import type { ToolCategory } from '@/tools/tools.types';
 import { useToolStore } from '@/tools/tools.store';
 import CollapsibleToolMenu from '@/components/CollapsibleToolMenu.vue';
@@ -59,56 +58,60 @@ const tools = computed<ToolCategory[]>(() => [
         <CollapsibleToolMenu :tools-by-category="tools" />
 
         <AdSlot slot-id="sidebar" format="vertical" />
-
-        <div class="footer">
-          <div>
-            © {{ new Date().getFullYear() }} Xaygo Labs
-          </div>
-          <div style="font-size: 11px; margin-top: 4px;">
-            Based on
-            <c-link target="_blank" rel="noopener" href="https://github.com/CorentinTh/it-tools">
-              it-tools
-            </c-link>
-            by CorentinTh · GPL-3.0
-          </div>
-        </div>
       </div>
     </template>
 
     <template #content>
-      <div flex items-center justify-center gap-2>
-        <c-button
-          circle
-          variant="text"
-          :aria-label="$t('home.toggleMenu')"
-          @click="styleStore.isMenuCollapsed = !styleStore.isMenuCollapsed"
-        >
-          <NIcon size="25" :component="Menu2" />
-        </c-button>
-
-        <c-tooltip :tooltip="$t('home.home')" position="bottom">
-          <c-button to="/" circle variant="text" :aria-label="$t('home.home')">
-            <NIcon size="25" :component="Home2" />
+      <header class="content-header">
+        <div class="header-left">
+          <c-button
+            circle
+            variant="text"
+            :aria-label="$t('home.toggleMenu')"
+            @click="styleStore.isMenuCollapsed = !styleStore.isMenuCollapsed"
+          >
+            <NIcon size="25" :component="Menu2" />
           </c-button>
-        </c-tooltip>
 
-        <c-tooltip :tooltip="$t('home.uiLib')" position="bottom">
-          <c-button v-if="config.app.env === 'development'" to="/c-lib" circle variant="text" :aria-label="$t('home.uiLib')">
-            <icon-mdi:brush-variant text-20px />
-          </c-button>
-        </c-tooltip>
+          <c-tooltip :tooltip="$t('home.home')" position="bottom">
+            <c-button to="/" circle variant="text" :aria-label="$t('home.home')">
+              <NIcon size="25" :component="Home2" />
+            </c-button>
+          </c-tooltip>
 
-        <command-palette />
-
-        <locale-selector v-if="!styleStore.isSmallScreen" />
-
-        <div>
-          <NavbarButtons v-if="!styleStore.isSmallScreen" />
+          <command-palette />
         </div>
 
+        <nav class="header-nav">
+          <RouterLink to="/privacy" class="header-nav-link">Privacy Policy</RouterLink>
+          <RouterLink to="/terms" class="header-nav-link">Terms and Conditions</RouterLink>
+          <RouterLink to="/about" class="header-nav-link">About</RouterLink>
+          <locale-selector v-if="!styleStore.isSmallScreen" />
+          <NavbarButtons v-if="!styleStore.isSmallScreen" />
+        </nav>
+      </header>
 
-      </div>
       <slot />
+
+      <footer class="content-footer">
+        <RouterLink to="/privacy" class="footer-link">Privacy Policy</RouterLink>
+        <span class="footer-sep">·</span>
+        <RouterLink to="/terms" class="footer-link">Terms and Conditions</RouterLink>
+        <span class="footer-sep">·</span>
+        <RouterLink to="/about" class="footer-link">About</RouterLink>
+        <span class="footer-sep">·</span>
+        <a
+          href="https://github.com/misswebx/it-tools-web"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="footer-link footer-github"
+          aria-label="GitHub repository"
+        >
+          <NIcon size="16" :component="BrandGithub" />
+        </a>
+        <span class="footer-divider" />
+        <span class="footer-copyright">© {{ new Date().getFullYear() }} Xaygo Labs · Based on <a href="https://github.com/CorentinTh/it-tools" target="_blank" rel="noopener" class="footer-link">it-tools</a> by CorentinTh · GPL-3.0</span>
+      </footer>
     </template>
   </MenuLayout>
 </template>
@@ -124,13 +127,6 @@ const tools = computed<ToolCategory[]>(() => [
 //     background-position: 0 0, @position @position;
 //     background-size: @size @size;
 // }
-
-.footer {
-  text-align: center;
-  color: #838587;
-  margin-top: 20px;
-  padding: 20px 0;
-}
 
 .sider-content {
   padding-top: 20px;
@@ -154,6 +150,92 @@ const tools = computed<ToolCategory[]>(() => [
     width: 36px;
     height: auto;
     display: block;
+  }
+}
+
+.content-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+  gap: 8px;
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    .header-nav-link {
+      padding: 4px 8px;
+      font-size: 13px;
+      text-decoration: none;
+      color: inherit;
+      opacity: 0.65;
+      border-radius: 4px;
+      transition: opacity 0.15s;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      &.router-link-active {
+        opacity: 1;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.content-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  padding: 20px 16px;
+  font-size: 13px;
+  color: inherit;
+  opacity: 0.65;
+  border-top: 1px solid rgba(128, 128, 128, 0.15);
+
+  .footer-link {
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.15s;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  .footer-sep {
+    opacity: 0.5;
+  }
+
+  .footer-divider {
+    display: block;
+    width: 100%;
+    height: 0;
+  }
+
+  .footer-copyright {
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    opacity: 0.7;
+  }
+
+  .footer-github {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
   }
 }
 </style>

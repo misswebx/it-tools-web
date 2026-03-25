@@ -1,4 +1,5 @@
 import { resolve } from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { URL, fileURLToPath } from 'node:url';
 
 import VueI18n from '@intlify/unplugin-vue-i18n/vite';
@@ -56,6 +57,12 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       strategies: 'generateSW',
+      workbox: {
+        // Do NOT intercept navigation requests for static/SEO files.
+        // Without this, the SW's NavigationRoute returns index.html for
+        // /sitemap.xml, /robots.txt, etc., causing the Vue 404 page to render.
+        navigateFallbackDenylist: [/^\/sitemap\.xml$/, /^\/robots\.txt$/, /^\/browserconfig\.xml$/, /\.\w+$/],
+      },
       manifest: {
         name: 'Xaygo — Developer Tools',
         short_name: 'Xaygo',
@@ -64,7 +71,7 @@ export default defineConfig({
         lang: 'en',
         start_url: `${baseUrl}?utm_source=pwa&utm_medium=pwa`,
         orientation: 'any',
-        theme_color: '#18a058',
+        theme_color: '#00bfff',
         background_color: '#f1f5f9',
         icons: [
           {
@@ -98,6 +105,19 @@ export default defineConfig({
       resolvers: [NaiveUiResolver(), IconsResolver({ prefix: 'icon' })],
     }),
     Unocss(),
+    {
+      name: 'ssg-post-build',
+      closeBundle() {
+        // Run SSG meta injection + sitemap generation after every production build.
+        // This ensures it runs even when Cloudflare Pages uses its Vite preset
+        // (which executes `vite build` directly instead of `pnpm build`).
+        if (process.env.NODE_ENV !== 'production') return;
+        const result = spawnSync('node', ['scripts/generate-ssg.mjs'], { stdio: 'inherit' });
+        if (result.status !== 0) {
+          throw new Error('[ssg-post-build] generate-ssg.mjs failed');
+        }
+      },
+    },
   ],
   base: baseUrl,
   resolve: {

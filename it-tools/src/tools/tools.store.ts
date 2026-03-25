@@ -5,6 +5,22 @@ import _ from 'lodash';
 import type { Tool, ToolCategory, ToolWithCategory } from './tools.types';
 import { toolsWithCategory } from './index';
 
+// Top tools by search volume — shown in the Popular Tools section on the homepage
+const POPULAR_TOOL_PATHS = [
+  '/json-prettify',
+  '/jwt-parser',
+  '/base64-string-converter',
+  '/url-encoder',
+  '/qr-code-generator',
+  '/uuid-generator',
+  '/hash-text',
+  '/regex-tester',
+  '/date-converter',
+  '/color-converter',
+  '/sql-prettify',
+  '/markdown-to-html',
+];
+
 export const useToolStore = defineStore('tools', () => {
   const favoriteToolsName = useStorage('favoriteToolsName', []) as Ref<string[]>;
   const { t } = useI18n();
@@ -43,6 +59,11 @@ export const useToolStore = defineStore('tools', () => {
     favoriteTools,
     toolsByCategory,
     newTools: computed(() => tools.value.filter(({ isNew }) => isNew)),
+    popularTools: computed(() =>
+      POPULAR_TOOL_PATHS
+        .map(path => tools.value.find(t => t.path === path))
+        .filter(Boolean) as ToolWithCategory[],
+    ),
 
     addToolToFavorites({ tool }: { tool: MaybeRef<Tool> }) {
       const toolPath = get(tool).path;

@@ -70,12 +70,12 @@ useHead({
 
 <style scoped>
 a {
-  color: #1ea54c;
+  color: #00bfff;
   text-decoration: none;
   transition: color 0.2s;
 }
 a:hover {
-  color: #25c45c;
+  color: #29cbff;
   text-decoration: underline;
 }
 </style>

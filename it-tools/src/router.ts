@@ -18,24 +18,32 @@ const toolsRedirectRoutes = tools
     ({ path, redirectFrom }) => redirectFrom?.map(redirectSource => ({ path: redirectSource, redirect: path })) ?? [],
   );
 
+// Export routes array separately — required by ViteSSG
+export const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: HomePage,
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: () => import('./pages/About.vue'),
+  },
+  {
+    path: '/privacy',
+    name: 'privacy',
+    component: () => import('./pages/Privacy.vue'),
+  },
+  ...toolsRoutes,
+  ...toolsRedirectRoutes,
+  ...(config.app.env === 'development' ? demoRoutes : []),
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
+];
+
 const router = createRouter({
   history: createWebHistory(config.app.baseUrl),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomePage,
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: () => import('./pages/About.vue'),
-    },
-    ...toolsRoutes,
-    ...toolsRedirectRoutes,
-    ...(config.app.env === 'development' ? demoRoutes : []),
-    { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
-  ],
+  routes,
 });
 
 export default router;

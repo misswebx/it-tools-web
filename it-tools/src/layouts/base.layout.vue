@@ -14,6 +14,7 @@ import { config } from '@/config';
 import type { ToolCategory } from '@/tools/tools.types';
 import { useToolStore } from '@/tools/tools.store';
 import CollapsibleToolMenu from '@/components/CollapsibleToolMenu.vue';
+import AdSlot from '@/components/AdSlot.vue';
 
 const styleStore = useStyleStore();
 
@@ -56,6 +57,8 @@ const tools = computed<ToolCategory[]>(() => [
         </div>
 
         <CollapsibleToolMenu :tools-by-category="tools" />
+
+        <AdSlot slot-id="sidebar" format="vertical" />
 
         <div class="footer">
           <div>

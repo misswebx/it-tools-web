@@ -4,6 +4,7 @@ import { useHead } from '@vueuse/head';
 import type { HeadObject } from '@vueuse/head';
 
 import BaseLayout from './base.layout.vue';
+import AdSlot from '@/components/AdSlot.vue';
 import FavoriteButton from '@/components/FavoriteButton.vue';
 import type { Tool } from '@/tools/tools.types';
 
@@ -85,6 +86,8 @@ useHead(head);
     <div class="tool-content">
       <slot />
     </div>
+
+    <AdSlot slot-id="tool-bottom" format="horizontal" />
   </BaseLayout>
 </template>
 

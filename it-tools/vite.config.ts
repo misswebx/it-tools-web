@@ -62,6 +62,15 @@ export default defineConfig({
         // Without this, the SW's NavigationRoute returns index.html for
         // /sitemap.xml, /robots.txt, etc., causing the Vue 404 page to render.
         navigateFallbackDenylist: [/^\/sitemap\.xml$/, /^\/robots\.txt$/, /^\/browserconfig\.xml$/, /\.\w+$/],
+        // Exclude Vite's internal CommonJS-proxy shims from the precache manifest.
+        // Tools like bcrypt and hash-text depend on these files via dynamic import.
+        // When the SW precaches them it can fail to serve them, blocking tool load.
+        // Excluding them lets requests fall through to the network (CDN-cached via
+        // content-hash filename) without any SW interference.
+        globIgnores: ['**/___vite-browser-external*', '**/*-commonjs-proxy*'],
+        // Remove stale precache entries whenever a new SW activates, so assets
+        // from a previous deployment don't linger and cause cache conflicts.
+        cleanupOutdatedCaches: true,
       },
       manifest: {
         name: 'Xaygo — Developer Tools',

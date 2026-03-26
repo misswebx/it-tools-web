@@ -110,7 +110,7 @@ const tools = computed<ToolCategory[]>(() => [
           <NIcon size="16" :component="BrandGithub" />
         </a>
         <span class="footer-divider" />
-        <span class="footer-copyright">© {{ new Date().getFullYear() }} Xaygo Labs · Based on <a href="https://github.com/CorentinTh/it-tools" target="_blank" rel="noopener" class="footer-link">it-tools</a> by CorentinTh · GPL-3.0</span>
+        <span class="footer-copyright">© {{ new Date().getFullYear() }} Xaygo Labs </span>
       </footer>
     </template>
   </MenuLayout>

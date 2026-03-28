@@ -2,7 +2,7 @@
 import { NIcon } from 'naive-ui';
 
 import { RouterLink } from 'vue-router';
-import { BrandGithub, Home2, Menu2 } from '@vicons/tabler';
+import { BrandGithub, Home2, Menu2, X } from '@vicons/tabler';
 
 import { storeToRefs } from 'pinia';
 import XaygoLogo from '../assets/xaygo-logo.png';
@@ -31,20 +31,32 @@ const tools = computed<ToolCategory[]>(() => [
 <template>
   <MenuLayout class="menu-layout" :class="{ isSmallScreen: styleStore.isSmallScreen }">
     <template #sider>
-      <RouterLink to="/" class="hero-wrapper">
-        <img
-          v-if="!styleStore.isMenuCollapsed"
-          :src="XaygoLogo"
-          alt="Xaygo"
-          class="xaygo-logo-full"
+      <div class="sider-top-bar">
+        <RouterLink to="/" class="hero-wrapper">
+          <img
+            v-if="!styleStore.isMenuCollapsed"
+            :src="XaygoLogo"
+            alt="Xaygo"
+            class="xaygo-logo-full"
+          >
+          <img
+            v-else
+            :src="XaygoIcon"
+            alt="Xaygo"
+            class="xaygo-logo-icon"
+          >
+        </RouterLink>
+        <c-button
+          v-if="styleStore.isSmallScreen"
+          circle
+          variant="text"
+          class="sider-close-btn"
+          aria-label="Close menu"
+          @click="styleStore.isMenuCollapsed = true"
         >
-        <img
-          v-else
-          :src="XaygoIcon"
-          alt="Xaygo"
-          class="xaygo-logo-icon"
-        >
-      </RouterLink>
+          <NIcon size="22" :component="X" />
+        </c-button>
+      </div>
 
       <div class="sider-content">
         <div v-if="styleStore.isSmallScreen" flex flex-col items-center>
@@ -83,9 +95,9 @@ const tools = computed<ToolCategory[]>(() => [
         </div>
 
         <nav class="header-nav">
-          <RouterLink to="/privacy" class="header-nav-link">Privacy Policy</RouterLink>
-          <RouterLink to="/terms" class="header-nav-link">Terms and Conditions</RouterLink>
-          <RouterLink to="/about" class="header-nav-link">About</RouterLink>
+          <RouterLink v-if="!styleStore.isSmallScreen" to="/privacy" class="header-nav-link">Privacy Policy</RouterLink>
+          <RouterLink v-if="!styleStore.isSmallScreen" to="/terms" class="header-nav-link">Terms and Conditions</RouterLink>
+          <RouterLink v-if="!styleStore.isSmallScreen" to="/about" class="header-nav-link">About</RouterLink>
           <locale-selector v-if="!styleStore.isSmallScreen" />
           <NavbarButtons v-if="!styleStore.isSmallScreen" />
         </nav>
@@ -131,6 +143,17 @@ const tools = computed<ToolCategory[]>(() => [
 .sider-content {
   padding-top: 20px;
   padding-bottom: 200px;
+}
+
+.sider-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 4px;
+}
+
+.sider-close-btn {
+  flex-shrink: 0;
 }
 
 .hero-wrapper {
